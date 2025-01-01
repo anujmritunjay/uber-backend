@@ -10,13 +10,19 @@ import (
 func NewValidationError(err error) {
 	errorMessage := ""
 	for _, e := range err.(validator.ValidationErrors) {
-		fmt.Printf("Field: %s, Error: %s\n", e.Field(), e.Tag())
 		if e.Tag() == "required" {
 			errorMessage = fmt.Sprintf("%v is Required.", e.Field())
 		}
 
 		if e.Tag() == "email" {
 			errorMessage = "Please provide a valid email."
+		}
+
+		if e.Tag() == "min" {
+			errorMessage = fmt.Sprintf("%v is should be min %v character.", e.Field(), e.Param())
+		}
+		if e.Tag() == "max" {
+			errorMessage = fmt.Sprintf("%v is should be max %v character.", e.Field(), e.Param())
 		}
 
 		panic(utils.NewError(403, errorMessage))

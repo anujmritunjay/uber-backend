@@ -8,6 +8,7 @@ import (
 func SignUpValidation(user models.SignUp) {
 	validate := validator.New()
 	if err := validate.Struct(user); err != nil {
+		// fmt.Println(err)
 		NewValidationError(err)
 
 	}
