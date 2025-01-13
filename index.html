@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebSocket Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        #messages {
+            border: 1px solid #ccc;
+            padding: 10px;
+            height: 200px;
+            overflow-y: auto;
+        }
+
+        #input-section {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>WebSocket Test</h1>
+    <div id="messages"></div>
+    <div id="input-section">
+        <input type="text" id="messageInput" placeholder="Type your message" />
+        <button id="sendButton">Send</button>
+    </div>
+
+    <script>
+        // Replace with your WebSocket server URL
+        const socket = new WebSocket("ws://localhost:8080/ws");
+
+        const messagesDiv = document.getElementById("messages");
+        const messageInput = document.getElementById("messageInput");
+        const sendButton = document.getElementById("sendButton");
+
+        // Append messages to the messagesDiv
+        function addMessage(message) {
+            const messageElement = document.createElement("div");
+            messageElement.textContent = message;
+            messagesDiv.appendChild(messageElement);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight; // Auto-scroll
+        }
+
+        // WebSocket event listeners
+        socket.onopen = () => {
+            addMessage("Connected to the WebSocket server");
+        };
+
+        socket.onmessage = (event) => {
+            addMessage(`Server: ${event.data}`);
+        };
+
+        socket.onerror = (error) => {
+            addMessage(`Error: ${error.message}`);
+        };
+
+        socket.onclose = () => {
+            addMessage("Disconnected from the WebSocket server");
+        };
+
+        // Send message to server
+        sendButton.addEventListener("click", () => {
+            const message = messageInput.value.trim();
+            if (message) {
+                socket.send(message);
+                addMessage(`You: ${message}`);
+                messageInput.value = ""; // Clear the input
+            }
+        });
+    </script>
+</body>
+
+</html>

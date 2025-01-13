@@ -18,6 +18,7 @@ func main() {
 	router.Use(middlewares.ErrorMiddleware())
 
 	routes.UserRoutes(router)
+	routes.SocketRoutes(router) // WebSocket routes
 
 	log.Println("Server is running on port 8080")
 
