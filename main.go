@@ -14,11 +14,13 @@ func main() {
 	defer cancel()
 	defer client.Disconnect(ctx)
 
+	appCtx := &config.AppContext{DB: client, Ctx: ctx}
+
 	router := gin.Default()
 	router.Use(middlewares.ErrorMiddleware())
 
-	routes.UserRoutes(router)
-	routes.SocketRoutes(router) // WebSocket routes
+	routes.UserRoutes(router, appCtx)
+	// routes.SocketRoutes(router) // WebSocket routes
 
 	log.Println("Server is running on port 8080")
 

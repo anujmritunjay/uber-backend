@@ -25,6 +25,12 @@ func NewValidationError(err error) {
 			errorMessage = fmt.Sprintf("%v is should be max %v character.", e.Field(), e.Param())
 		}
 
+		if e.Tag() == "alphanum" {
+
+			errorMessage = fmt.Sprintf("%v should be alphanumeric.", e.Field())
+		}
+		fmt.Println("Printing error", e.Value())
+
 		panic(utils.NewError(403, errorMessage))
 	}
 }
