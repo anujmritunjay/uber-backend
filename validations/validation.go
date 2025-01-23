@@ -31,6 +31,6 @@ func NewValidationError(err error) {
 		}
 		fmt.Println("Printing error", e.Value())
 
-		panic(utils.NewError(403, errorMessage))
+		panic(utils.NewError(errorMessage, 403))
 	}
 }

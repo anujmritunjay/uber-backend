@@ -17,7 +17,12 @@ func (e *CustomError) Error() string {
 	return e.Message
 }
 
-func NewError(code int, message string) *CustomError {
+func NewError(message string, codes ...int) *CustomError {
+	code := 500
+	if len(codes) > 0 {
+		code = codes[0]
+	}
+
 	return &CustomError{
 		Code:    code,
 		Success: false,
@@ -33,12 +38,11 @@ func ErrorFormatter(err error) {
 			errorMessage = fmt.Sprintf("%v is Required.", e.Field())
 		}
 
-		panic(NewError(403, errorMessage))
+		panic(NewError(errorMessage, 403))
 	}
 }
 
 func HandleError(c *gin.Context, err error) {
-	fmt.Println(err)
 	c.Header("Content-Type", "application/json")
 	if customErr, ok := err.(*CustomError); ok {
 		c.JSON(customErr.Code, gin.H{

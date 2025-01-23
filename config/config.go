@@ -11,11 +11,6 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-type AppContext struct {
-	DB  *mongo.Client
-	Ctx context.Context
-}
-
 func ConnectMongoDB() (*mongo.Client, context.Context, context.CancelFunc) {
 	err := godotenv.Load(".env")
 	if err != nil {
