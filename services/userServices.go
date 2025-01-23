@@ -1,6 +1,8 @@
 package services
 
 import (
+	"fmt"
+
 	"github.com/anujmritunjay/uber-backend/utils"
 	"github.com/golang-jwt/jwt/v5"
 	"golang.org/x/crypto/bcrypt"
@@ -35,4 +37,23 @@ func GenerateToken(id string) string {
 		panic(utils.NewError(err.Error()))
 	}
 	return tokenString
+}
+
+func DecodeJWT(tokenString string) jwt.MapClaims {
+	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			panic(utils.NewError(fmt.Sprintf("unexpected signing method: %v", token.Header["alg"])))
+		}
+		return []byte(utils.JWT_SECRET), nil
+	})
+
+	if err != nil {
+		panic(utils.NewError(err.Error()))
+	}
+
+	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
+		return claims
+	}
+
+	return nil
 }

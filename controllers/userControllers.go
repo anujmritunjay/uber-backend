@@ -89,3 +89,17 @@ func LogIn(c *gin.Context, db *mongo.Client) {
 	})
 
 }
+
+func Me(c *gin.Context, db *mongo.Client) {
+	user, isExists := c.Get("user")
+
+	if isExists == false {
+		panic(utils.NewError("Unauthorized.", 401))
+	}
+
+	c.JSON(200, gin.H{
+		"success": true,
+		"data":    user,
+	})
+
+}

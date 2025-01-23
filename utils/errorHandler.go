@@ -55,4 +55,5 @@ func HandleError(c *gin.Context, err error) {
 			"message": "Internal server error",
 		})
 	}
+	c.Abort()
 }
