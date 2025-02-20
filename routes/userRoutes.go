@@ -19,6 +19,10 @@ func UserRoutes(router *gin.Engine, db *mongo.Client) {
 			controllers.LogIn(ctx, db)
 		})
 
+		userGroups.POST("/log-out", func(ctx *gin.Context) {
+			controllers.LogOut(ctx, db)
+		})
+
 	}
 
 	protectedRoutes := router.Group("/auth", func(ctx *gin.Context) {

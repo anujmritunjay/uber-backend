@@ -82,6 +82,8 @@ func LogIn(c *gin.Context, db *mongo.Client) {
 
 	token := services.GenerateToken(user.ID.Hex())
 
+	c.SetCookie("token", token, 3600*24, "/", "", true, true)
+
 	c.JSON(200, gin.H{
 		"success": true,
 		"data":    user,
@@ -90,10 +92,18 @@ func LogIn(c *gin.Context, db *mongo.Client) {
 
 }
 
+func LogOut(c *gin.Context, db *mongo.Client) {
+	c.SetCookie("token", "", -1, "/", "", true, true)
+	c.JSON(200, gin.H{
+		"success": true,
+		"message": "Logged out successfully.",
+	})
+}
+
 func Me(c *gin.Context, db *mongo.Client) {
 	user, isExists := c.Get("user")
 
-	if isExists == false {
+	if !isExists {
 		panic(utils.NewError("Unauthorized.", 401))
 	}
 

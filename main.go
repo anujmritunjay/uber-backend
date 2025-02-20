@@ -15,6 +15,12 @@ func main() {
 	defer client.Disconnect(ctx)
 
 	router := gin.Default()
+	router.GET("/", func(ctx *gin.Context) {
+		ctx.JSON(200, gin.H{
+			"success": true,
+			"message": "Uber clone backend",
+		})
+	})
 	router.Use(middlewares.ErrorMiddleware())
 
 	routes.UserRoutes(router, client)
